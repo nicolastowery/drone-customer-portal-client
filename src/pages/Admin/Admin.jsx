@@ -1,12 +1,13 @@
 import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
-import supabase from "../../supabase/supabase";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import styles from "./Admin.module.css";
+import supabase from "../../supabase/supabase";
 
 function Admin() {
   const [session, setSession] = useState(null);
+
   // auth
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
