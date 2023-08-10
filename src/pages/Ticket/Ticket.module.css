@@ -1,0 +1,29 @@
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.gallery__item {
+  height: 300px;
+  border-radius: 3px;
+}
+
+.image {
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out; /* Add transition for smooth animation */
+}
+
+.image:hover {
+  transform: scale(1.6); /* Zoom effect on hover */
+
+  z-index: 1; /* Bring the hovered item to the top */
+}
+
+.galleryContainer {
+  display: flex;
+}
+
+.ticketContainer {
+  padding: 0 10%;
+}

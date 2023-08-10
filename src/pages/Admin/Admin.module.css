@@ -1,0 +1,10 @@
+.authContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth {
+  width: 500px;
+  overflow: hidden;
+}

@@ -1,0 +1,99 @@
+@import "../../keyframes.css";
+
+.nav {
+  display: flex;
+  padding: 20px 50px 20px 30px;
+  animation: fade-in-from-top 1s 0.1s backwards;
+}
+
+.list {
+  margin-left: auto;
+  display: flex;
+  list-style: none;
+  column-gap: 85px;
+  box-sizing: border-box;
+}
+
+.list__item {
+  display: flex;
+  justify-content: center;
+}
+
+.toggle {
+  cursor: pointer;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  column-gap: 3px;
+  position: relative;
+  transition: all 0.2s;
+  letter-spacing: 0.7px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.toggle::before {
+  content: "";
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #000;
+  transition: all 0.2s;
+}
+
+.toggle:hover::before {
+  width: 100%;
+}
+
+.toggle:global(.active)::before {
+  width: 100%;
+  transition: all 0.2s;
+}
+
+@media (max-width: 666px) {
+  .list {
+    column-gap: 40px;
+  }
+
+  .toggle::before {
+    bottom: 5px;
+  }
+}
+
+@media (max-width: 515px) {
+  .list {
+    column-gap: 30px;
+  }
+
+  .nav {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 420px) {
+  .nav {
+    font-size: 12px;
+  }
+}
+@media (max-width: 365px) {
+  .nav {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 300px) {
+  .nav {
+    padding: 15px 8px;
+    font-size: 10px;
+  }
+
+  .list {
+    column-gap: 20px;
+  }
+
+  .toggle::before {
+    bottom: 2px;
+  }
+}
