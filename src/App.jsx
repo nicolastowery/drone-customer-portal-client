@@ -43,6 +43,10 @@ function App() {
   };
 
   const handleLogout = () => {
+    const userConfirmation = window.confirm(
+      "WARNING: You are about to logout of the Bestway Drones Customer Portal!\n\nPlease ensure that you have your password either saved in your browser or elsewhere. If you have lost your password, contact us at (270) 887-8550."
+    );
+    if (!userConfirmation) return;
     localStorage.removeItem("token");
     setToken(null);
   };
