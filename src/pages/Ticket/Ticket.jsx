@@ -4,6 +4,7 @@ import styles from "./Ticket.module.css";
 function Ticket() {
   const { id } = useParams();
   const [ticket, setTicket] = useState({});
+  const [newStatus, setNewStatus] = useState("");
   const [files, setFiles] = useState([]);
 
   // data
@@ -39,6 +40,7 @@ function Ticket() {
           const formattedDate = dateObject.toLocaleString("en-US", options);
           ticketData.created_at = formattedDate;
           setTicket(ticketData);
+          setNewStatus(ticketData.status);
           data.files && setFiles(data.files);
         }
       } catch (err) {
@@ -49,6 +51,31 @@ function Ticket() {
     getData();
   }, [id]);
 
+  const handleChange = async () => {
+    const userConfirmation = window.confirm(
+      `Confirm changes: Ticket Status: ${ticket.status} >> ${newStatus}\n\nUpon confirmation, the client will be notified via email of this change.`
+    );
+    if (userConfirmation) {
+      const res = await fetch("http://localhost:3001/update-ticket", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Set the content type header
+        },
+        body: JSON.stringify({
+          ticket_id: ticket.ticket_id,
+          status: newStatus,
+        }),
+      });
+      const data = res.json;
+      if (!res.ok) {
+        console.log("Error updating the ticket status!");
+        return;
+      }
+      console.log(data);
+      return;
+    }
+    setNewStatus(ticket.status);
+  };
   return (
     <div className={styles.ticketContainer}>
       <div className={styles.heading}>
@@ -79,7 +106,21 @@ function Ticket() {
                 <span className={styles.value}>{ticket.request_type}</span>
               </li>
               <li>
-                <span className={styles.value}>{ticket.status}</span>
+                <span className={styles.value}>
+                  <select
+                    value={newStatus}
+                    onChange={(e) => setNewStatus(e.target.value)}
+                  >
+                    {ticket.status === "NEW" && (
+                      <option value="NEW">NEW</option>
+                    )}
+                    <option value="OPEN">OPEN</option>
+                    <option value="CLOSED">CLOSE</option>
+                  </select>
+                  {newStatus !== ticket.status && (
+                    <button onClick={handleChange}>Update</button>
+                  )}
+                </span>
               </li>
               <li>
                 <span className={styles.value}>{ticket.created_at}</span>
