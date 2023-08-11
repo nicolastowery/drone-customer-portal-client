@@ -5,12 +5,17 @@
   font-family: "Roboto Condensed", sans-serif;
 }
 
+li {
+  list-style: none;
+}
+
 input,
 textarea {
   border: 2px solid black;
 }
 
-input:focus {
+input:focus,
+textarea:focus {
   outline: none;
   background-color: white;
 }

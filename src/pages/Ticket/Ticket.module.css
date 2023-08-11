@@ -1,6 +1,7 @@
 .gallery {
   display: flex;
   flex-wrap: wrap;
+  padding: 7px;
   gap: 4px;
 }
 
@@ -21,9 +22,73 @@
 }
 
 .galleryContainer {
-  display: flex;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 2px solid black;
 }
 
 .ticketContainer {
   padding: 0 10%;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 7px;
+}
+
+.backButton {
+  text-decoration: none;
+  color: white;
+  display: block;
+  background-color: black;
+  padding: 17px;
+  font-size: 17px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.infoContainer {
+  display: flex;
+  gap: 50px;
+}
+
+.ticketInfo {
+  border: 2px solid black;
+}
+
+.customerInfo {
+  border: 2px solid black;
+}
+
+.customerNotes {
+  border: 2px solid black;
+  min-width: 400px;
+  max-width: 632px;
+}
+
+.customerNote {
+  display: block;
+  padding: 4px;
+}
+
+.infoHeading {
+  color: white;
+  background-color: black;
+}
+
+.infoListContainer {
+  display: flex;
+  column-gap: 1px;
+  padding: 4px;
+}
+
+.fields {
+  font-weight: bold;
+  width: 190px;
+}
+
+.values {
+  width: 190px;
 }

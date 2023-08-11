@@ -51,7 +51,7 @@ function TicketList() {
                     <td className={styles.table__cell}>
                       <b>{t.ticket_id}</b>
                     </td>
-                    <td className={styles.table__cellCenter}>OPEN</td>
+                    <td className={styles.table__cellCenter}>{t.status}</td>
                     <td className={styles.table__cell}>
                       {t.f_name}&nbsp;{t.l_name}
                     </td>
