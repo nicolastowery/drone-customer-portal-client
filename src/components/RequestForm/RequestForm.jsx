@@ -11,6 +11,7 @@ const MAX_IMG_SIZE = 50 * 1024 * 1024;
 function RequestForm({ requestType, onChangeRequestType }) {
   const [images, setImages] = useState([]);
   const [videos, setVideos] = useState([]);
+  const [qr, setQr] = useState(null);
   const [message, setMessage] = useState("");
   const formData = new FormData();
   const [formBody, setFormBody] = useState({
@@ -33,6 +34,10 @@ function RequestForm({ requestType, onChangeRequestType }) {
   //this function needs to be cleaned up
   //relevant state should set back to empty if files were rejected
   const handleFileChange = (fileType, files) => {
+    if (fileType === "qr") {
+      console.log("file type:", typeof files);
+      setQr(files);
+    }
     const maxSize = fileType === "images" ? MAX_IMG_SIZE : MAX_VID_SIZE;
     let uploadSize = 0;
     const filesArr = Array.from(files);
@@ -70,9 +75,10 @@ function RequestForm({ requestType, onChangeRequestType }) {
       !formBody.firstName ||
       !formBody.lastName ||
       !formBody.email ||
-      !formBody.text
+      !formBody.text ||
+      (formBody.requestType === "warranty" && !qr)
     ) {
-      setMessage("Please input data into the required fields");
+      setMessage("Please input data into the required fields!");
       return;
     }
 
@@ -110,7 +116,8 @@ function RequestForm({ requestType, onChangeRequestType }) {
       formData.append("phoneNumber", formBody.phoneNumber);
       formData.append("contactMethod", formBody.contactMethod);
       formData.append("text", formBody.text);
-
+      qr && console.log("there is a qr");
+      qr && formData.append("files", qr);
       images &&
         Array.from(images).forEach((image) => formData.append("files", image));
       videos &&
@@ -137,13 +144,14 @@ function RequestForm({ requestType, onChangeRequestType }) {
     <>
       <form className={styles.form}>
         <div className={styles.form__item}>
-          <label>Request Type:&nbsp;</label>
+          <label>Request Type</label>
           <select
             value={requestType}
             onChange={(e) => handleChange("requestType", e.target.value)}
           >
             <option value="question">General Question</option>
-            <option value="repair">Repair</option>
+            <option value="warranty">Warranty Repair</option>
+            <option value="repair">Non-Warranty Repair</option>
             <option value="training">Training Request</option>
           </select>
         </div>
@@ -215,6 +223,18 @@ function RequestForm({ requestType, onChangeRequestType }) {
             <option value="call">Call Phone</option>
           </select>
         </div>
+        {requestType === "warranty" && (
+          <div className={styles.form__item}>
+            <label htmlFor="qr">QR Code*</label>
+            <input
+              id="qr"
+              type="file"
+              accept="image/jpeg, image/png, image/gif"
+              value={formBody.qr}
+              onChange={(e) => handleFileChange("qr", e.target.files)}
+            />
+          </div>
+        )}
         <div className={styles.form__item}>
           <label htmlFor="images">Image(s) (50MB cap)</label>
           <input
@@ -244,8 +264,8 @@ function RequestForm({ requestType, onChangeRequestType }) {
           </label>
           <textarea
             placeholder={
-              requestType === "repair"
-                ? "NOTE: We STRONGLY recommend uploading relevant images / videos."
+              requestType === "repair" || requestType === "warranty"
+                ? "It is STRONGLY recommend to upload relevant images / videos."
                 : "Enter text here..."
             }
             value={formBody.text}

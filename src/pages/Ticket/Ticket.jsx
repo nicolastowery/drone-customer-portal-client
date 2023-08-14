@@ -7,7 +7,28 @@ function Ticket() {
   const [newStatus, setNewStatus] = useState("");
   const [files, setFiles] = useState([]);
 
-  // data
+  const updateTicket = async (ticketData) => {
+    // Convert the timestamp to a Date object
+    const dateObject = new Date(ticketData.created_at);
+
+    // Format the date and time components
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: true,
+    };
+
+    const formattedDate = dateObject.toLocaleString("en-US", options);
+    ticketData.created_at = formattedDate;
+    setTicket(ticketData);
+    setNewStatus(ticketData.status);
+  };
+
+  // initial data fetch
   useEffect(() => {
     const getData = async () => {
       try {
@@ -22,25 +43,7 @@ function Ticket() {
           const data = await res.json();
           console.log(data);
           const ticketData = data.ticketData;
-
-          // Convert the timestamp to a Date object
-          const dateObject = new Date(ticketData.created_at);
-
-          // Format the date and time components
-          const options = {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            hour: "numeric",
-            minute: "numeric",
-            second: "numeric",
-            hour12: true,
-          };
-
-          const formattedDate = dateObject.toLocaleString("en-US", options);
-          ticketData.created_at = formattedDate;
-          setTicket(ticketData);
-          setNewStatus(ticketData.status);
+          updateTicket(ticketData);
           data.files && setFiles(data.files);
         }
       } catch (err) {
@@ -66,16 +69,17 @@ function Ticket() {
           status: newStatus,
         }),
       });
-      const data = res.json;
+      const data = await res.json();
       if (!res.ok) {
         console.log("Error updating the ticket status!");
         return;
       }
-      console.log(data);
+      updateTicket(data);
       return;
     }
     setNewStatus(ticket.status);
   };
+
   return (
     <div className={styles.ticketContainer}>
       <div className={styles.heading}>
@@ -116,6 +120,7 @@ function Ticket() {
                     )}
                     <option value="OPEN">OPEN</option>
                     <option value="CLOSED">CLOSE</option>
+                    <option value="VOID">VOID</option>
                   </select>
                   {newStatus !== ticket.status && (
                     <button onClick={handleChange}>Update</button>
