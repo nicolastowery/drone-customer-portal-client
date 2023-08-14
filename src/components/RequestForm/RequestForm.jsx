@@ -1,10 +1,15 @@
 import { useState } from "react";
 import stateNames from "./states";
+import InputField from "./InputField";
+import SelectField from "./SelectField";
+import FileInput from "./FileInput";
 import styles from "./RequestForm.module.css";
+import TextArea from "./TextArea";
+import Message from "../Message/Message";
 
 const VALID_PHONE = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
 const VALID_EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const SYMBOLS = /[<>&|=`{}]/; //removed $
+const SYMBOLS = /[<>&|=`{}]/;
 const MAX_VID_SIZE = 200 * 1024 * 1024;
 const MAX_IMG_SIZE = 50 * 1024 * 1024;
 
@@ -25,7 +30,7 @@ function RequestForm({ requestType, onChangeRequestType }) {
     contactMethod: "email",
     text: "",
   });
-  const handleChange = (name, value) => {
+  const handleFieldChange = (name, value) => {
     if (SYMBOLS.test(value)) return;
     if (name === "requestType") onChangeRequestType(value);
     setFormBody((prev) => ({ ...prev, [name]: value }));
@@ -35,8 +40,9 @@ function RequestForm({ requestType, onChangeRequestType }) {
   //relevant state should set back to empty if files were rejected
   const handleFileChange = (fileType, files) => {
     if (fileType === "qr") {
-      console.log("file type:", typeof files);
-      setQr(files);
+      console.log("setting qr code");
+      files[0].size < MAX_IMG_SIZE && setQr(files[0]);
+      return;
     }
     const maxSize = fileType === "images" ? MAX_IMG_SIZE : MAX_VID_SIZE;
     let uploadSize = 0;
@@ -79,6 +85,7 @@ function RequestForm({ requestType, onChangeRequestType }) {
       (formBody.requestType === "warranty" && !qr)
     ) {
       setMessage("Please input data into the required fields!");
+      console.log(qr);
       return;
     }
 
@@ -143,140 +150,128 @@ function RequestForm({ requestType, onChangeRequestType }) {
   return (
     <>
       <form className={styles.form}>
-        <div className={styles.form__item}>
-          <label>Request Type</label>
-          <select
-            value={requestType}
-            onChange={(e) => handleChange("requestType", e.target.value)}
-          >
-            <option value="question">General Question</option>
-            <option value="warranty">Warranty Repair</option>
-            <option value="repair">Non-Warranty Repair</option>
-            <option value="training">Training Request</option>
-          </select>
-        </div>
-        <div className={styles.form__item}>
-          <label htmlFor="firstName">First Name*</label>
-          <input
-            type="text"
-            id="firstName"
-            value={formBody.firstName}
-            onChange={(e) => handleChange("firstName", e.target.value)}
+        <SelectField
+          label={"Request Type"}
+          value={requestType}
+          onChange={(e) => handleFieldChange("requestType", e.target.value)}
+          className={styles.form__item}
+          options={[
+            "General Question",
+            "Warranty Repair",
+            "Non-Warranty Repair",
+            "Training Request",
+          ]}
+        />
+        <InputField
+          label="First Name"
+          value={formBody.firstName}
+          onChange={(e) => handleFieldChange("firstName", e.target.value)}
+          isRequired={true}
+          className={styles.form__item}
+        />
+        <InputField
+          label="Last Name"
+          value={formBody.lastName}
+          onChange={(e) => handleFieldChange("lastName", e.target.value)}
+          isRequired={true}
+          className={styles.form__item}
+        />
+        <InputField
+          label="Company"
+          value={formBody.companyName}
+          onChange={(e) => handleFieldChange("companyName", e.target.value)}
+          className={styles.form__item}
+        />
+        <SelectField
+          label={"State"}
+          value={formBody.state}
+          onChange={(e) => handleFieldChange("state", e.target.value)}
+          className={styles.form__item}
+          options={stateNames}
+        />
+        <InputField
+          label="Email"
+          value={formBody.email}
+          onChange={(e) => handleFieldChange("email", e.target.value)}
+          className={styles.form__item}
+          isRequired={true}
+        />
+        <InputField
+          label="Phone Number"
+          value={formBody.phoneNumber}
+          onChange={(e) => handleFieldChange("phoneNumber", e.target.value)}
+          className={styles.form__item}
+        />
+        <SelectField
+          label={"Preferred Contact Method"}
+          value={formBody.contactMethod}
+          onChange={(e) => handleFieldChange("contactMethod", e.target.value)}
+          className={styles.form__item}
+          options={["Email", "Text Phone", "Call Phone"]}
+          disabled={!formBody.phoneNumber}
+        />
+        {requestType === "Warranty Repair" && (
+          <FileInput
+            label={"QR Code"}
+            isRequired={true}
+            className={styles.form__item}
+            accept={"image/jpeg, image/png"}
+            value={formBody.qr}
+            onChange={(e) => handleFileChange("qr", e.target.files)}
+            multiple={false}
           />
-        </div>
-        <div className={styles.form__item}>
-          <label>Last Name*</label>
-          <input
-            type="text"
-            value={formBody.lastName}
-            onChange={(e) => handleChange("lastName", e.target.value)}
-          />
-        </div>
-        <div className={styles.form__item}>
-          <label>Company Name</label>
-          <input
-            type="text"
-            value={formBody.companyName}
-            onChange={(e) => handleChange("companyName", e.target.value)}
-          />
-        </div>
-        <div className={styles.form__item}>
-          <label>State</label>
-          <select
-            value={formBody.state}
-            onChange={(e) => handleChange("state", e.target.value)}
-          >
-            {stateNames.map((s) => {
-              return (
-                <option value={s} key={s}>
-                  {s}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-        <div className={styles.form__item}>
-          <label>Email*</label>
-          <input
-            type="text"
-            value={formBody.email}
-            onChange={(e) => handleChange("email", e.target.value)}
-          />
-        </div>
-        <div className={styles.form__item}>
-          <label>Phone Number</label>
-          <input
-            type="text"
-            value={formBody.phoneNumber}
-            onChange={(e) => handleChange("phoneNumber", e.target.value)}
-          />
-        </div>
-        <div className={styles.form__item}>
-          <label>Preferred method of contact</label>
-          <select
-            value={formBody.contactMethod}
-            onChange={(e) => handleChange("contactMethod", e.target.value)}
-            disabled={!formBody.phoneNumber}
-          >
-            <option value="email">Email</option>
-            <option value="text">Text Phone</option>
-            <option value="call">Call Phone</option>
-          </select>
-        </div>
-        {requestType === "warranty" && (
-          <div className={styles.form__item}>
-            <label htmlFor="qr">QR Code*</label>
-            <input
-              id="qr"
-              type="file"
-              accept="image/jpeg, image/png, image/gif"
-              value={formBody.qr}
-              onChange={(e) => handleFileChange("qr", e.target.files)}
-            />
-          </div>
         )}
-        <div className={styles.form__item}>
-          <label htmlFor="images">Image(s) (50MB cap)</label>
-          <input
-            id="images"
-            type="file"
-            multiple
-            accept="image/jpeg, image/png, image/gif"
-            value={formBody.images}
-            onChange={(e) => handleFileChange("images", e.target.files)}
-          />
-        </div>
-        <div className={styles.form__item}>
-          <label>Video(s) (200MB cap)</label>
-          <input
-            type="file"
-            multiple
-            accept="video/mp4, video/webm, video/quicktime"
-            onChange={(e) => handleFileChange("videos", e.target.files)}
-          />
-        </div>
-        <div className={`${styles.form__item} ${styles.text}`}>
-          <label>
-            {requestType === "question" && "What is your question?*"}
-            {requestType === "repair" && "Describe what needs to be repaired.*"}
-            {requestType === "training" &&
-              "What are you looking to be trained on?"}
-          </label>
-          <textarea
-            placeholder={
-              requestType === "repair" || requestType === "warranty"
-                ? "It is STRONGLY recommend to upload relevant images / videos."
-                : "Enter text here..."
+        <FileInput
+          label={"Image(s) (50MB cap)"}
+          isRequired={true}
+          className={styles.form__item}
+          accept={"image/jpeg, image/png, image/gif"}
+          value={formBody.images}
+          onChange={(e) => handleFileChange("images", e.target.files)}
+        />
+        <FileInput
+          label={"Video(s) (200MB cap)"}
+          isRequired={true}
+          className={styles.form__item}
+          accept={"video/mp4, video/webm, video/quicktime"}
+          value={formBody.videos}
+          onChange={(e) => handleFileChange("videos", e.target.files)}
+        />
+        <TextArea
+          label={(() => {
+            if (requestType === "General Question") {
+              return "What is your question?";
+            } else if (
+              requestType === "Non-Warranty Repair" ||
+              requestType === "Warranty Repair"
+            ) {
+              return "Describe what needs to be repaired.";
+            } else if (requestType === "Training Request") {
+              return "What are you looking to be trained on?";
+            } else {
+              return "";
             }
-            value={formBody.text}
-            onChange={(e) => handleChange("text", e.target.value)}
-            maxLength={8000}
-          ></textarea>
-        </div>
+          })()}
+          placeholder={(() => {
+            if (
+              requestType === "Non-Warranty Repair" ||
+              requestType === "Warranty Repair"
+            ) {
+              return "It is STRONGLY recommend to upload relevant images / videos.";
+            } else {
+              return "Enter text here...";
+            }
+          })()}
+          value={formBody.text}
+          onChange={(e) => handleFieldChange("text", e.target.value)}
+          maxLength={8000}
+          isRequired={true}
+          className={`${styles.form__item} ${styles.text}`}
+        />
 
         <button onClick={handleSubmit}>Submit Ticket</button>
       </form>
-      <p>{message}</p>
+      <Message message={message} />
     </>
   );
 }
