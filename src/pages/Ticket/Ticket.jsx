@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
+import InfoBlock from "../../components/InfoContainer/InfoBlock";
 import styles from "./Ticket.module.css";
 function Ticket() {
   const { id } = useParams();
@@ -89,7 +90,7 @@ function Ticket() {
         </NavLink>
       </div>
       <div className={styles.infoContainer}>
-        <div className={styles.ticketInfo}>
+        {/* <div className={styles.ticketInfo}>
           <h2 className={styles.infoHeading}>
             <i>Ticket Info</i>
           </h2>
@@ -132,8 +133,29 @@ function Ticket() {
               </li>
             </ul>
           </div>
-        </div>
-        <div className={styles.customerInfo}>
+        </div> */}
+        <InfoBlock
+          containerType="list"
+          title="Ticket Info"
+          listItems={[
+            { "Request Type": ticket.request_type },
+            { Status: "status" },
+            { "Ticket Submission Date": ticket.created_at },
+          ]}
+        />
+        <InfoBlock
+          containerType="list"
+          title="Customer Info"
+          listItems={[
+            { "Customer Name": `${ticket.f_name} ${ticket.l_name}` },
+            { "Company Name": ticket.company },
+            { State: ticket.state },
+            { Email: ticket.email },
+            { Phone: ticket.phone },
+            { "Contact Method": ticket.contact_method },
+          ]}
+        />
+        {/* <div className={styles.customerInfo}>
           <h2 className={styles.infoHeading}>
             <i>Customer Info</i>
           </h2>
@@ -157,7 +179,7 @@ function Ticket() {
               {ticket.contact_method && <li>{ticket.contact_method}</li>}
             </ul>
           </div>
-        </div>
+        </div> */}
         <div className={styles.customerNotes}>
           <h2 className={styles.infoHeading}>
             <i>Customer Notes</i>

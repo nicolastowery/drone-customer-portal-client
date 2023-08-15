@@ -1,0 +1,23 @@
+.infoBlock {
+  border: 2px solid black;
+}
+
+.infoHeading {
+  color: white;
+  background-color: black;
+}
+
+.infoListContainer {
+  display: flex;
+  column-gap: 1px;
+  padding: 4px;
+}
+
+.fields {
+  font-weight: bold;
+  width: 190px;
+}
+
+.values {
+  width: 190px;
+}
