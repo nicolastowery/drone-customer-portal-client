@@ -4,7 +4,7 @@ function Login({ setToken }) {
   const [password, setPassword] = useState("");
   const handleLogin = async (password) => {
     try {
-      const res = await fetch("http://localhost:3001/login", {
+      const res = await fetch("http://localhost:3001/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json", // Set the content type header

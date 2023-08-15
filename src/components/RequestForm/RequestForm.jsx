@@ -36,7 +36,6 @@ function RequestForm({ requestType, onChangeRequestType }) {
     setFormBody((prev) => ({ ...prev, [name]: value }));
   };
 
-  //this function needs to be cleaned up
   //relevant state should set back to empty if files were rejected
   const handleFileChange = (fileType, files) => {
     if (fileType === "qr") {
@@ -131,7 +130,7 @@ function RequestForm({ requestType, onChangeRequestType }) {
         Array.from(videos).forEach((video) => formData.append("files", video));
 
       console.log("sending data!");
-      const res = await fetch(`http://localhost:3001/send`, {
+      const res = await fetch(`http://localhost:3001/api/send`, {
         method: "POST",
         body: formData,
       });

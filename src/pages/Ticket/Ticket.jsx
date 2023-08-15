@@ -32,7 +32,7 @@ function Ticket() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await fetch(`http://localhost:3001/ticket`, {
+        const res = await fetch(`http://localhost:3001/api/ticket`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -59,7 +59,7 @@ function Ticket() {
       `Confirm changes: Ticket Status: ${ticket.status} >> ${newStatus}\n\nUpon confirmation, the client will be notified via email of this change.`
     );
     if (userConfirmation) {
-      const res = await fetch("http://localhost:3001/update-ticket", {
+      const res = await fetch("http://localhost:3001/api/update-ticket", {
         method: "POST",
         headers: {
           "Content-Type": "application/json", // Set the content type header

@@ -8,7 +8,8 @@ function TicketList() {
   // data
   useEffect(() => {
     const getData = async () => {
-      const res = await fetch(`http://localhost:3001/admin`);
+      console.log("fetching data");
+      const res = await fetch(`http://localhost:3001/api/admin`);
       const data = await res.json();
       console.log(data);
       setTickets(data);
