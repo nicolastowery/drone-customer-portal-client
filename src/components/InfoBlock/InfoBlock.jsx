@@ -15,7 +15,7 @@ function InfoBlock({ containerType, title, listItems, children }) {
                   {Object.keys(item).map((key) => {
                     return (
                       item[key] && (
-                        <li key={key}>
+                        <li key={key} className={styles.li}>
                           <span>{key}</span>
                         </li>
                       )
@@ -33,7 +33,7 @@ function InfoBlock({ containerType, title, listItems, children }) {
                     {Object.keys(item).map((key) => {
                       return (
                         item[key] && (
-                          <li key={item[key]}>
+                          <li key={item[key]} className={styles.li}>
                             <span>{item[key]}</span>
                           </li>
                         )

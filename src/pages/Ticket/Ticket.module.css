@@ -26,6 +26,24 @@
   column-gap: 25px;
 }
 
+.updateButton {
+  margin-left: 4px;
+  background-color: black;
+  color: white;
+  border: none;
+  height: 25px;
+  width: 50px;
+  border-radius: 50px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+
+.updateButton:hover {
+  transform: translateY(-1px);
+}
+
 .button {
   text-decoration: none;
   color: white;
@@ -37,6 +55,11 @@
   text-transform: uppercase;
   border: none;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.button:hover {
+  transform: translateY(-1px);
 }
 
 .downloadIcon {

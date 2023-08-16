@@ -9,7 +9,6 @@ function Ticket() {
   const [ticket, setTicket] = useState({});
   const [newStatus, setNewStatus] = useState("");
   const [files, setFiles] = useState([]);
-  const [zipUrl, setZipUrl] = useState("");
 
   const updateTicket = async (ticketData) => {
     // Convert the timestamp to a Date object
@@ -54,7 +53,6 @@ function Ticket() {
         console.log(err);
       }
     };
-
     getData();
   }, [id]);
 
@@ -105,7 +103,7 @@ function Ticket() {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "download.zip"; // Set the desired file name
+    a.download = `${ticket.ticket_id}-files.zip`; // Set the desired file name
     a.style.display = "none"; // Hide the anchor element
 
     document.body.appendChild(a); // Append the anchor element to the body
@@ -115,15 +113,18 @@ function Ticket() {
 
     document.body.removeChild(a); // Remove the anchor element from the body
   };
+
   return (
     <div className={styles.ticketContainer}>
       <div className={styles.ticket}>
         <div className={styles.heading}>
           <h1 className={styles.id}>Ticket ID {id}</h1>
           <div className={styles.buttonContainer}>
-            <button className={styles.button} onClick={handleDownload}>
-              Download
-            </button>
+            {files.length > 0 && (
+              <button className={styles.button} onClick={handleDownload}>
+                Download
+              </button>
+            )}
             <NavLink to="/admin" className={styles.button}>
               <span>&larr; Back</span>
             </NavLink>
@@ -138,7 +139,7 @@ function Ticket() {
               {
                 Status: (
                   <>
-                    <SelectField
+                    {/* <SelectField
                       value={newStatus}
                       onChange={(e) => setNewStatus(e.target.value)}
                       options={
@@ -147,9 +148,14 @@ function Ticket() {
                           : ["OPEN", "CLOSED", "VOID"]
                       }
                       className={styles.inline}
-                    />
+                    /> */}
                     {newStatus !== ticket.status && (
-                      <button onClick={handleChange}>Update</button>
+                      <button
+                        onClick={handleChange}
+                        className={styles.updateButton}
+                      >
+                        Save
+                      </button>
                     )}{" "}
                   </>
                 ),

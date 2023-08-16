@@ -24,7 +24,7 @@ function SelectField({
       >
         {options.map((o) => {
           return (
-            <option value={o} key={o}>
+            <option value={o} key={o} className={styles.option}>
               {o}
             </option>
           );

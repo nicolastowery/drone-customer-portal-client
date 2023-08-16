@@ -2,7 +2,7 @@
   border: 2px solid black;
   flex-grow: 1;
   flex-basis: calc(33.33% - 1rem);
-  /* min-width: 400px; */
+  min-width: 392px;
   /* max-width: 632px; */
   min-height: 100px;
 }
@@ -27,9 +27,16 @@
   width: 190px;
 }
 
+.li {
+  padding: 1.5px 0;
+}
+
 @media (max-width: 953px) {
   .infoBlock {
     flex: 1 1 100%;
+  }
+  .infoBlock {
+    min-width: 20px; /* jank but works? */
   }
 }
 @media (max-width: 395px) {
