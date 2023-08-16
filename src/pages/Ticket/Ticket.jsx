@@ -9,6 +9,7 @@ function Ticket() {
   const [ticket, setTicket] = useState({});
   const [newStatus, setNewStatus] = useState("");
   const [files, setFiles] = useState([]);
+  const [zipUrl, setZipUrl] = useState("");
 
   const updateTicket = async (ticketData) => {
     // Convert the timestamp to a Date object
@@ -83,14 +84,45 @@ function Ticket() {
     setNewStatus(ticket.status);
   };
 
+  const handleDownload = async () => {
+    const res = await fetch("http://localhost:3001/api/get-files", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ticket_id: ticket.ticket_id,
+        files,
+      }),
+    });
+
+    if (!res.ok) {
+      console.log("error with downloading files!");
+      return;
+    }
+    const blob = await res.blob(); // Create a Blob from the response data
+    const url = URL.createObjectURL(blob); // Generate a temporary URL
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "download.zip"; // Set the desired file name
+    a.style.display = "none"; // Hide the anchor element
+
+    document.body.appendChild(a); // Append the anchor element to the body
+    a.click(); // Programmatically click the anchor element
+
+    URL.revokeObjectURL(url); // Clean up the temporary URL
+
+    document.body.removeChild(a); // Remove the anchor element from the body
+  };
   return (
     <div className={styles.ticketContainer}>
       <div className={styles.ticket}>
         <div className={styles.heading}>
           <h1 className={styles.id}>Ticket ID {id}</h1>
           <div className={styles.buttonContainer}>
-            <button className={styles.button}>
-              <span>Download</span>
+            <button className={styles.button} onClick={handleDownload}>
+              Download
             </button>
             <NavLink to="/admin" className={styles.button}>
               <span>&larr; Back</span>
