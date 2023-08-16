@@ -9,10 +9,12 @@ function SelectField({
 }) {
   return (
     <div className={className}>
-      <label>
-        {label}
-        {isRequired && "*"}
-      </label>
+      {label && (
+        <label>
+          {label}
+          {isRequired && "*"}
+        </label>
+      )}
       <select value={value} onChange={onChange} disabled={disabled}>
         {options.map((o) => {
           return (

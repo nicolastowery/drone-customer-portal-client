@@ -1,3 +1,4 @@
+import React from "react";
 import styles from "./InfoBlock.module.css";
 function InfoBlock({ containerType, title, listItems, children }) {
   return (
@@ -8,35 +9,37 @@ function InfoBlock({ containerType, title, listItems, children }) {
       {containerType === "list" ? (
         <div className={styles.infoListContainer}>
           <ul className={styles.fields}>
-            {listItems.map((item) => {
+            {listItems.map((item, index) => {
               return (
-                <>
+                <React.Fragment key={index}>
                   {Object.keys(item).map((key) => {
-                    if (!item[key]) return;
                     return (
-                      <li key={key}>
-                        <span>{key}</span>
-                      </li>
+                      item[key] && (
+                        <li key={key}>
+                          <span>{key}</span>
+                        </li>
+                      )
                     );
                   })}
-                </>
+                </React.Fragment>
               );
             })}
           </ul>
           {
             <ul className={styles.values}>
-              {listItems.map((item) => {
+              {listItems.map((item, index) => {
                 return (
-                  <>
+                  <React.Fragment key={index}>
                     {Object.keys(item).map((key) => {
-                      if (!item[key]) return;
                       return (
-                        <li key={item[key]}>
-                          <span>{item[key]}</span>
-                        </li>
+                        item[key] && (
+                          <li key={item[key]}>
+                            <span>{item[key]}</span>
+                          </li>
+                        )
                       );
                     })}
-                  </>
+                  </React.Fragment>
                 );
               })}
             </ul>

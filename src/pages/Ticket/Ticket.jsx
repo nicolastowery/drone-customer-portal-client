@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import InfoBlock from "../../components/InfoContainer/InfoBlock";
+import SelectField from "../../components/RequestForm/SelectField";
+import Gallery from "../../components/Gallery/Gallery";
 import styles from "./Ticket.module.css";
 function Ticket() {
   const { id } = useParams();
@@ -83,139 +85,62 @@ function Ticket() {
 
   return (
     <div className={styles.ticketContainer}>
-      <div className={styles.heading}>
-        <h1>Ticket ID {id}</h1>
-        <NavLink to="/admin" className={styles.backButton}>
-          &larr; Back
-        </NavLink>
-      </div>
-      <div className={styles.infoContainer}>
-        {/* <div className={styles.ticketInfo}>
-          <h2 className={styles.infoHeading}>
-            <i>Ticket Info</i>
-          </h2>
-          <div className={styles.infoListContainer}>
-            <ul className={styles.fields}>
-              <li>
-                <span className={styles.field}>Request Type</span>
-              </li>
-              <li>
-                <span className={styles.field}>Status</span>
-              </li>
-              <li>
-                <span className={styles.field}>Ticket Submission Date</span>
-              </li>
-            </ul>
-            <ul className={styles.values}>
-              <li>
-                <span className={styles.value}>{ticket.request_type}</span>
-              </li>
-              <li>
-                <span className={styles.value}>
-                  <select
-                    value={newStatus}
-                    onChange={(e) => setNewStatus(e.target.value)}
-                  >
-                    {ticket.status === "NEW" && (
-                      <option value="NEW">NEW</option>
-                    )}
-                    <option value="OPEN">OPEN</option>
-                    <option value="CLOSED">CLOSE</option>
-                    <option value="VOID">VOID</option>
-                  </select>
-                  {newStatus !== ticket.status && (
-                    <button onClick={handleChange}>Update</button>
-                  )}
-                </span>
-              </li>
-              <li>
-                <span className={styles.value}>{ticket.created_at}</span>
-              </li>
-            </ul>
-          </div>
-        </div> */}
-        <InfoBlock
-          containerType="list"
-          title="Ticket Info"
-          listItems={[
-            { "Request Type": ticket.request_type },
-            { Status: "status" },
-            { "Ticket Submission Date": ticket.created_at },
-          ]}
-        />
-        <InfoBlock
-          containerType="list"
-          title="Customer Info"
-          listItems={[
-            { "Customer Name": `${ticket.f_name} ${ticket.l_name}` },
-            { "Company Name": ticket.company },
-            { State: ticket.state },
-            { Email: ticket.email },
-            { Phone: ticket.phone },
-            { "Contact Method": ticket.contact_method },
-          ]}
-        />
-        {/* <div className={styles.customerInfo}>
-          <h2 className={styles.infoHeading}>
-            <i>Customer Info</i>
-          </h2>
-          <div className={styles.infoListContainer}>
-            <ul className={styles.fields}>
-              <li>Customer Name</li>
-              {ticket.company && <li>Company Name</li>}
-              {ticket.state && <li>State</li>}
-              <li>Email</li>
-              {ticket.phone && <li>Phone</li>}
-              {ticket.contact_method && <li>Contact Method</li>}
-            </ul>
-            <ul className={styles.values}>
-              <li>
-                {ticket.f_name}&nbsp;{ticket.l_name}
-              </li>
-              {ticket.company && <li>{ticket.company}</li>}
-              {ticket.state && <li>{ticket.state}</li>}
-              <li>{ticket.email}</li>
-              {ticket.phone && <li>{ticket.phone}</li>}
-              {ticket.contact_method && <li>{ticket.contact_method}</li>}
-            </ul>
-          </div>
-        </div> */}
-        <div className={styles.customerNotes}>
-          <h2 className={styles.infoHeading}>
-            <i>Customer Notes</i>
-          </h2>
-          <span className={styles.customerNote}>{ticket.text}</span>
-        </div>
-      </div>
-      {files.length > 0 && (
-        <div className={styles.galleryContainer}>
-          <h2 className={styles.infoHeading}>
-            <i>Gallery</i>
-          </h2>
-          <div className={styles.gallery}>
-            {files.map((file, index) => (
-              <div key={index} className={styles.galleryFlex}>
-                {/* Display image */}
-                {file.type.includes("image") && (
-                  <img
-                    className={`${styles.gallery__item} ${styles.image}`}
-                    src={`http://localhost:3001/${file.url}`}
-                    alt={`File ${index + 1}`}
-                  />
-                )}
-                {/* Display video */}
-                {file.type.includes("video") && (
-                  <video
-                    controls
-                    src={`http://localhost:3001/${file.url}`}
-                    className={styles.gallery__item}
-                  />
-                )}
-              </div>
-            ))}
+      <div className={styles.ticket}>
+        <div className={styles.heading}>
+          <h1 className={styles.id}>Ticket ID {id}</h1>
+          <div className={styles.buttonContainer}>
+            <button className={styles.button}>
+              <span>Download</span>
+            </button>
+            <NavLink to="/admin" className={styles.button}>
+              <span>&larr; Back</span>
+            </NavLink>
           </div>
         </div>
-      )}
+        <div className={styles.infoContainer}>
+          <InfoBlock
+            containerType="list"
+            title="Ticket Info"
+            listItems={[
+              { "Request Type": ticket.request_type },
+              {
+                Status: (
+                  <>
+                    <SelectField
+                      value={newStatus}
+                      onChange={(e) => setNewStatus(e.target.value)}
+                      options={
+                        ticket.status === "NEW"
+                          ? ["NEW", "OPEN", "CLOSED", "VOID"]
+                          : ["OPEN", "CLOSED", "VOID"]
+                      }
+                      className={styles.inline}
+                    />
+                    {newStatus !== ticket.status && (
+                      <button onClick={handleChange}>Update</button>
+                    )}{" "}
+                  </>
+                ),
+              },
+              { "Ticket Submission Date": ticket.created_at },
+            ]}
+          />
+          <InfoBlock
+            containerType="list"
+            title="Customer Info"
+            listItems={[
+              { "Customer Name": `${ticket.f_name} ${ticket.l_name}` },
+              { "Company Name": ticket.company },
+              { State: ticket.state },
+              { Email: ticket.email },
+              { Phone: ticket.phone },
+              { "Contact Method": ticket.contact_method },
+            ]}
+          />
+          <InfoBlock title="Customer Notes">{ticket.text}</InfoBlock>
+        </div>
+        {files.length > 0 && <Gallery files={files} />}
+      </div>
     </div>
   );
 }

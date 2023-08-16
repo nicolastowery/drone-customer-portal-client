@@ -1,5 +1,10 @@
 .infoBlock {
   border: 2px solid black;
+  flex-grow: 1;
+  flex-basis: calc(33.33% - 1rem);
+  /* min-width: 400px; */
+  /* max-width: 632px; */
+  min-height: 100px;
 }
 
 .infoHeading {
@@ -20,4 +25,25 @@
 
 .values {
   width: 190px;
+}
+
+@media (max-width: 953px) {
+  .infoBlock {
+    flex: 1 1 100%;
+  }
+}
+@media (max-width: 395px) {
+  .fields {
+    width: 80px;
+    font-size: 12px;
+  }
+
+  .values {
+    width: 80px;
+    font-size: 12px;
+  }
+
+  .infoHeading {
+    font-size: 16px;
+  }
 }

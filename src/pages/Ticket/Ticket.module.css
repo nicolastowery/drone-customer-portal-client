@@ -1,13 +1,13 @@
-.gallery {
+.heading {
   display: flex;
-  flex-wrap: wrap;
-  padding: 7px;
-  gap: 4px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 7px;
 }
 
-.gallery__item {
-  height: 300px;
-  border-radius: 3px;
+.infoHeading {
+  background-color: black;
+  color: white;
 }
 
 .image {
@@ -21,24 +21,23 @@
   z-index: 1; /* Bring the hovered item to the top */
 }
 
-.galleryContainer {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border: 2px solid black;
-}
-
 .ticketContainer {
-  padding: 0 10%;
-}
-
-.heading {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 7px;
+  justify-content: center;
+  width: auto;
 }
 
-.backButton {
+.ticket {
+  max-width: 1310px;
+  /* padding: 0 5%; */
+}
+
+.buttonContainer {
+  display: flex;
+  column-gap: 25px;
+}
+
+.button {
   text-decoration: none;
   color: white;
   display: block;
@@ -47,48 +46,51 @@
   font-size: 17px;
   font-weight: bold;
   text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+}
+
+.downloadIcon {
+  background-image: url(/public/download.png) center/cover no-repeat;
 }
 
 .infoContainer {
   display: flex;
+  margin-bottom: 50px;
   gap: 50px;
 }
 
-.ticketInfo {
-  border: 2px solid black;
+.inline {
+  display: inline;
 }
 
-.customerInfo {
-  border: 2px solid black;
+@media (max-width: 1375px) {
+  .infoContainer {
+    flex-wrap: wrap;
+  }
+
+  .ticket {
+    padding: 0 5%;
+  }
 }
 
-.customerNotes {
-  border: 2px solid black;
-  min-width: 400px;
-  max-width: 632px;
-}
+@media (max-width: 594px) {
+  .button {
+    font-size: 12px;
+    padding: 9px;
+  }
 
-.customerNote {
-  display: block;
-  padding: 4px;
+  .id {
+    font-size: 25px;
+  }
 }
+@media (max-width: 395px) {
+  .id {
+    font-size: 18px;
+  }
 
-.infoHeading {
-  color: white;
-  background-color: black;
-}
-
-.infoListContainer {
-  display: flex;
-  column-gap: 1px;
-  padding: 4px;
-}
-
-.fields {
-  font-weight: bold;
-  width: 190px;
-}
-
-.values {
-  width: 190px;
+  .button {
+    font-size: 10px;
+    padding: 7px;
+  }
 }
