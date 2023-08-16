@@ -1,7 +1,7 @@
 import { useState } from "react";
 import stateNames from "./states";
 import InputField from "./InputField";
-import SelectField from "./SelectField";
+import SelectField from "../SelectField/SelectField";
 import FileInput from "./FileInput";
 import styles from "./RequestForm.module.css";
 import TextArea from "./TextArea";
@@ -23,7 +23,7 @@ function RequestForm({ requestType, onChangeRequestType }) {
     firstName: "",
     lastName: "",
     companyName: "",
-    requestType: "question",
+    requestType: "General Question",
     state: "Alabama",
     email: "",
     phoneNumber: "",
@@ -222,7 +222,6 @@ function RequestForm({ requestType, onChangeRequestType }) {
         )}
         <FileInput
           label={"Image(s) (50MB cap)"}
-          isRequired={true}
           className={styles.form__item}
           accept={"image/jpeg, image/png, image/gif"}
           value={formBody.images}
@@ -230,7 +229,6 @@ function RequestForm({ requestType, onChangeRequestType }) {
         />
         <FileInput
           label={"Video(s) (200MB cap)"}
-          isRequired={true}
           className={styles.form__item}
           accept={"video/mp4, video/webm, video/quicktime"}
           value={formBody.videos}
@@ -266,9 +264,12 @@ function RequestForm({ requestType, onChangeRequestType }) {
           maxLength={8000}
           isRequired={true}
           className={`${styles.form__item} ${styles.text}`}
+          textareaClassName={styles.textarea}
         />
 
-        <button onClick={handleSubmit}>Submit Ticket</button>
+        <button onClick={handleSubmit} className={styles.button}>
+          SUBMIT
+        </button>
       </form>
       <Message message={message} />
     </>

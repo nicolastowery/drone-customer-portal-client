@@ -1,4 +1,4 @@
-import InfoBlock from "../InfoContainer/InfoBlock";
+import InfoBlock from "../InfoBlock/InfoBlock";
 import styles from "./Gallery.module.css";
 function Gallery({ files }) {
   return (

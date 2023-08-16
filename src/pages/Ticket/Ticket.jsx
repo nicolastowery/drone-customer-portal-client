@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
-import InfoBlock from "../../components/InfoContainer/InfoBlock";
-import SelectField from "../../components/RequestForm/SelectField";
+import InfoBlock from "../../components/InfoBlock/InfoBlock";
+import SelectField from "../../components/SelectField/SelectField";
 import Gallery from "../../components/Gallery/Gallery";
 import styles from "./Ticket.module.css";
 function Ticket() {

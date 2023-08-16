@@ -6,6 +6,7 @@ function TextArea({
   placeholder,
   isRequired,
   className,
+  textareaClassName,
 }) {
   return (
     <div className={className}>
@@ -14,6 +15,7 @@ function TextArea({
         {isRequired && "*"}
       </label>
       <textarea
+        className={textareaClassName}
         value={value}
         onChange={onChange}
         maxLength={maxLength}

@@ -1,3 +1,4 @@
+import styles from "./SelectField.module.css";
 function SelectField({
   label,
   value,
@@ -15,7 +16,12 @@ function SelectField({
           {isRequired && "*"}
         </label>
       )}
-      <select value={value} onChange={onChange} disabled={disabled}>
+      <select
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+        className={disabled ? styles.disabled : styles.select}
+      >
         {options.map((o) => {
           return (
             <option value={o} key={o}>

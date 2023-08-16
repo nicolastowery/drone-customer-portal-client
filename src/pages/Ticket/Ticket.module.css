@@ -10,17 +10,6 @@
   color: white;
 }
 
-.image {
-  overflow: hidden;
-  transition: transform 0.3s ease-in-out; /* Add transition for smooth animation */
-}
-
-.image:hover {
-  transform: scale(1.6); /* Zoom effect on hover */
-
-  z-index: 1; /* Bring the hovered item to the top */
-}
-
 .ticketContainer {
   display: flex;
   justify-content: center;

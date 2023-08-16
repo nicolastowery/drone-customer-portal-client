@@ -1,0 +1,20 @@
+.select {
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.disabled {
+  background-color: rgb(39, 39, 39);
+  color: rgb(170, 170, 170);
+  border: none;
+  border-radius: 20px;
+  font-weight: 600;
+  padding: 6px;
+  text-align: center;
+}
