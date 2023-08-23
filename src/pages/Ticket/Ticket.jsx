@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
+import Button from "../../components/Button/Button";
+import BackButton from "../../components/BackButton/BackButton";
 import InfoBlock from "../../components/InfoBlock/InfoBlock";
 import SelectField from "../../components/SelectField/SelectField";
 import Gallery from "../../components/Gallery/Gallery";
@@ -121,25 +123,23 @@ function Ticket() {
           <h1 className={styles.id}>Ticket ID {id}</h1>
           <div className={styles.buttonContainer}>
             {files.length > 0 && (
-              <button className={styles.button} onClick={handleDownload}>
-                Download
-              </button>
+              <Button onClick={handleDownload}>Download</Button>
             )}
-            <NavLink to="/admin" className={styles.button}>
+            <BackButton>
               <span>&larr; Back</span>
-            </NavLink>
+            </BackButton>
           </div>
         </div>
         <div className={styles.infoContainer}>
           <InfoBlock
-            containerType="list"
+            type="list"
             title="Ticket Info"
             listItems={[
               { "Request Type": ticket.request_type },
               {
                 Status: (
                   <>
-                    {/* <SelectField
+                    <SelectField
                       value={newStatus}
                       onChange={(e) => setNewStatus(e.target.value)}
                       options={
@@ -148,14 +148,11 @@ function Ticket() {
                           : ["OPEN", "CLOSED", "VOID"]
                       }
                       className={styles.inline}
-                    /> */}
+                    />
                     {newStatus !== ticket.status && (
-                      <button
-                        onClick={handleChange}
-                        className={styles.updateButton}
-                      >
+                      <Button onClick={handleChange} type="inline">
                         Save
-                      </button>
+                      </Button>
                     )}{" "}
                   </>
                 ),
@@ -164,7 +161,7 @@ function Ticket() {
             ]}
           />
           <InfoBlock
-            containerType="list"
+            type="list"
             title="Customer Info"
             listItems={[
               { "Customer Name": `${ticket.f_name} ${ticket.l_name}` },

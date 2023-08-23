@@ -13,7 +13,7 @@ const SYMBOLS = /[<>&|=`{}]/;
 const MAX_VID_SIZE = 200 * 1024 * 1024;
 const MAX_IMG_SIZE = 50 * 1024 * 1024;
 
-function RequestForm({ requestType, onChangeRequestType }) {
+function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
   const [images, setImages] = useState([]);
   const [videos, setVideos] = useState([]);
   const [qr, setQr] = useState(null);
@@ -137,7 +137,8 @@ function RequestForm({ requestType, onChangeRequestType }) {
       const data = await res.json();
       console.log(data);
       if (res.ok) {
-        setMessage(data);
+        console.log(data);
+        onSubmit(true);
       } else {
         setMessage(data.error || "An error occuerred. Please try again later.");
       }

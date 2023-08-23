@@ -1,0 +1,39 @@
+.button {
+  text-decoration: none;
+  color: white;
+  background-color: black;
+
+  font-weight: bold;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.block {
+  padding: 17px;
+  font-size: 17px;
+  display: block;
+}
+
+.inline {
+  margin-left: 4px;
+  color: white;
+  border: none;
+  height: 25px;
+  width: 50px;
+  border-radius: 50px;
+}
+
+@media (max-width: 594px) {
+  .block {
+    font-size: 12px;
+    padding: 9px;
+  }
+}
+@media (max-width: 395px) {
+  .block {
+    font-size: 10px;
+    padding: 7px;
+  }
+}

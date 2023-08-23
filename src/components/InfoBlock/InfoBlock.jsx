@@ -1,12 +1,12 @@
 import React from "react";
 import styles from "./InfoBlock.module.css";
-function InfoBlock({ containerType, title, listItems, children }) {
+function InfoBlock({ type, title, listItems, children }) {
   return (
     <div className={styles.infoBlock}>
       <h2 className={styles.infoHeading}>
         <i>{title}</i>
       </h2>
-      {containerType === "list" ? (
+      {type === "list" ? (
         <div className={styles.infoListContainer}>
           <ul className={styles.fields}>
             {listItems.map((item, index) => {
