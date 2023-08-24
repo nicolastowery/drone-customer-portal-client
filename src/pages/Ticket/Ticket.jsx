@@ -71,6 +71,7 @@ function Ticket() {
         body: JSON.stringify({
           ticket_id: ticket.ticket_id,
           status: newStatus,
+          email: ticket.email,
         }),
       });
       const data = await res.json();

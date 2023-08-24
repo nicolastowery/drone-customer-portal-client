@@ -9,7 +9,7 @@ function TicketList() {
   useEffect(() => {
     const getData = async () => {
       console.log("fetching data");
-      const res = await fetch(`http://localhost:3001/api/ticket-list`);
+      const res = await fetch(`http://localhost:3001/api/admin`);
       const data = await res.json();
       console.log(data);
       setTickets(data);

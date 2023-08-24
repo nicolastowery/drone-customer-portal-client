@@ -81,7 +81,7 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
       !formBody.lastName ||
       !formBody.email ||
       !formBody.text ||
-      (formBody.requestType === "warranty" && !qr)
+      (formBody.requestType === "Warranty Repair" && !qr)
     ) {
       setMessage("Please input data into the required fields!");
       console.log(qr);
