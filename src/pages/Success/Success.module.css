@@ -1,0 +1,30 @@
+@import "../../keyframes.css";
+
+.messageContainer {
+  font-size: 130%;
+  padding: 50px;
+  animation: fade-in-from-top 1s 0.2s backwards;
+}
+
+.messageContainer div {
+  padding-top: 10px;
+  padding-left: 15px;
+}
+
+.buttonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fade-in-from-top 1s 0.3s backwards;
+}
+
+@media (max-width: 1000px) {
+  .messageContainer {
+    font-size: 100%;
+  }
+}
+@media (max-width: 630px) {
+  .messageContainer {
+    padding: 50px 25px;
+  }
+}

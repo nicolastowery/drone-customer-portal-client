@@ -1,3 +1,4 @@
+@import "../../keyframes.css";
 .help {
   display: flex;
   flex-direction: column;
@@ -9,9 +10,11 @@
   align-items: center;
   min-height: 35px;
   margin-bottom: 10px;
+  animation: fade-in-from-top 1s 0.2s backwards;
 }
 
 .h1 {
   letter-spacing: 0.7px;
   text-transform: uppercase;
+  animation: fade-in-from-top 1s 0.1s backwards;
 }

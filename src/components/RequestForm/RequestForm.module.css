@@ -1,8 +1,10 @@
+@import "../../keyframes.css";
 .form {
   width: 300px;
   display: flex;
   flex-direction: column;
   row-gap: 8px;
+  animation: fade-in-from-top 1s 0.4s backwards;
 }
 
 .form__item {

@@ -27,7 +27,7 @@ function Help() {
           />
         </>
       )}
-      {submitted && <Success />}
+      {submitted && <Success setSubmitted={setSubmitted} />}
     </div>
   );
 }
