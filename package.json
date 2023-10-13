@@ -1,11 +1,11 @@
 {
-  "homepage": "https://nicolastowery.github.io/drone-customer-portal-client",
+  "homepage": "https://nicolastowery.github.io/drone-customer-portal-client/",
   "name": "client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "deploy": "gh-pages -d dist",
+    "deploy": "gh-pages -d build",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
