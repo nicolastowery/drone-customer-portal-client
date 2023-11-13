@@ -1,6 +1,8 @@
 import InfoBlock from "../InfoBlock/InfoBlock";
 import styles from "./Gallery.module.css";
+
 function Gallery({ files }) {
+  console.log(files);
   return (
     <InfoBlock title="Gallery">
       <div className={styles.gallery}>
@@ -10,7 +12,7 @@ function Gallery({ files }) {
             {file.type.includes("image") && (
               <img
                 className={`${styles.gallery__item} ${styles.image}`}
-                src={`http://localhost:3001/${file.url}`}
+                src={`${file.url}`}
                 alt={`File ${index + 1}`}
               />
             )}
@@ -18,7 +20,7 @@ function Gallery({ files }) {
             {file.type.includes("video") && (
               <video
                 controls
-                src={`http://localhost:3001/${file.url}`}
+                src={`${file.url}`}
                 className={styles.gallery__item}
               />
             )}
