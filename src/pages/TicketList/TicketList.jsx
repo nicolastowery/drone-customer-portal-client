@@ -1,23 +1,9 @@
-import { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useTickets } from "./useTickets";
 import styles from "./TicketList.module.css";
 import supabase from "../../supabase/supabase";
 function TicketList() {
-  const [tickets, setTickets] = useState([]);
-
-  // data
-  useEffect(() => {
-    const getData = async () => {
-      console.log("fetching data");
-      const res = await fetch(`http://localhost:3001/api/admin`);
-      const data = await res.json();
-      console.log(data);
-      setTickets(data);
-      // console.log(data);
-    };
-
-    getData();
-  }, []);
+  const { tickets, isLoading } = useTickets();
 
   const handleLogOut = async () => {
     const confirm = window.confirm("Are you sure you want to sign out?");
