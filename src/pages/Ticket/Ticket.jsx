@@ -1,62 +1,20 @@
 import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
+import { formatDate } from "../../utils/helpers";
 import Button from "../../components/Button/Button";
 import BackButton from "../../components/BackButton/BackButton";
 import InfoBlock from "../../components/InfoBlock/InfoBlock";
 import SelectField from "../../components/SelectField/SelectField";
 import Gallery from "../../components/Gallery/Gallery";
 import styles from "./Ticket.module.css";
+import { useTickets } from "../TicketList/useTickets";
 function Ticket() {
-  const { id } = useParams();
-  const [ticket, setTicket] = useState({});
   const [newStatus, setNewStatus] = useState("");
   const [files, setFiles] = useState([]);
-
-  const updateTicket = async (ticketData) => {
-    // Convert the timestamp to a Date object
-    const dateObject = new Date(ticketData.created_at);
-
-    // Format the date and time components
-    const options = {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      hour12: true,
-    };
-
-    const formattedDate = dateObject.toLocaleString("en-US", options);
-    ticketData.created_at = formattedDate;
-    setTicket(ticketData);
-    setNewStatus(ticketData.status);
-  };
-
-  // initial data fetch
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await fetch(`http://localhost:3001/api/ticket`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ticket_id: id }),
-        });
-        if (res.ok) {
-          const data = await res.json();
-          console.log(data);
-          const ticketData = data.ticketData;
-          updateTicket(ticketData);
-          data.files && setFiles(data.files);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getData();
-  }, [id]);
+  const { tickets } = useTickets();
+  const { id } = useParams();
+  const ticket = tickets.find((ticket) => ticket.ticket_id === id);
+  const formattedDate = formatDate(ticket.created_at);
 
   const handleChange = async () => {
     const userConfirmation = window.confirm(
@@ -79,7 +37,7 @@ function Ticket() {
         console.log("Error updating the ticket status!");
         return;
       }
-      updateTicket(data);
+      // updateTicket(data);
       return;
     }
     setNewStatus(ticket.status);
@@ -118,66 +76,72 @@ function Ticket() {
   };
 
   return (
-    <div className={styles.ticketContainer}>
-      <div className={styles.ticket}>
-        <div className={styles.heading}>
-          <h1 className={styles.id}>Ticket ID {id}</h1>
-          <div className={styles.buttonContainer}>
-            {files.length > 0 && (
-              <Button onClick={handleDownload}>Download</Button>
-            )}
-            <BackButton>
-              <span>&larr; Back</span>
-            </BackButton>
+    <>
+      {tickets ? (
+        <div className={styles.ticketContainer}>
+          <div className={styles.ticket}>
+            <div className={styles.heading}>
+              <h1 className={styles.id}>Ticket ID {id}</h1>
+              <div className={styles.buttonContainer}>
+                {files.length > 0 && (
+                  <Button onClick={handleDownload}>Download</Button>
+                )}
+                <BackButton>
+                  <span>&larr; Back</span>
+                </BackButton>
+              </div>
+            </div>
+            <div className={styles.infoContainer}>
+              <InfoBlock
+                type="list"
+                title="Ticket Info"
+                listItems={[
+                  { "Request Type": ticket.request_type },
+                  {
+                    Status: (
+                      <>
+                        <SelectField
+                          value={newStatus}
+                          onChange={(e) => setNewStatus(e.target.value)}
+                          options={
+                            ticket.status === "NEW"
+                              ? ["NEW", "OPEN", "CLOSED", "VOID"]
+                              : ["OPEN", "CLOSED", "VOID"]
+                          }
+                          className={styles.inline}
+                        />
+                        {newStatus !== ticket.status && (
+                          <Button onClick={handleChange} type="inline">
+                            Save
+                          </Button>
+                        )}{" "}
+                      </>
+                    ),
+                  },
+                  { "Ticket Submission Date": formattedDate },
+                ]}
+              />
+              <InfoBlock
+                type="list"
+                title="Customer Info"
+                listItems={[
+                  { "Customer Name": `${ticket.f_name} ${ticket.l_name}` },
+                  { "Company Name": ticket.company },
+                  { State: ticket.state },
+                  { Email: ticket.email },
+                  { Phone: ticket.phone },
+                  { "Contact Method": ticket.contact_method },
+                ]}
+              />
+              <InfoBlock title="Customer Notes">{ticket.text}</InfoBlock>
+            </div>
+            {ticket.file.length > 0 && <Gallery files={ticket.file} />}
           </div>
         </div>
-        <div className={styles.infoContainer}>
-          <InfoBlock
-            type="list"
-            title="Ticket Info"
-            listItems={[
-              { "Request Type": ticket.request_type },
-              {
-                Status: (
-                  <>
-                    <SelectField
-                      value={newStatus}
-                      onChange={(e) => setNewStatus(e.target.value)}
-                      options={
-                        ticket.status === "NEW"
-                          ? ["NEW", "OPEN", "CLOSED", "VOID"]
-                          : ["OPEN", "CLOSED", "VOID"]
-                      }
-                      className={styles.inline}
-                    />
-                    {newStatus !== ticket.status && (
-                      <Button onClick={handleChange} type="inline">
-                        Save
-                      </Button>
-                    )}{" "}
-                  </>
-                ),
-              },
-              { "Ticket Submission Date": ticket.created_at },
-            ]}
-          />
-          <InfoBlock
-            type="list"
-            title="Customer Info"
-            listItems={[
-              { "Customer Name": `${ticket.f_name} ${ticket.l_name}` },
-              { "Company Name": ticket.company },
-              { State: ticket.state },
-              { Email: ticket.email },
-              { Phone: ticket.phone },
-              { "Contact Method": ticket.contact_method },
-            ]}
-          />
-          <InfoBlock title="Customer Notes">{ticket.text}</InfoBlock>
-        </div>
-        {files.length > 0 && <Gallery files={files} />}
-      </div>
-    </div>
+      ) : (
+        <div>loading</div>
+      )}
+    </>
   );
 }
 

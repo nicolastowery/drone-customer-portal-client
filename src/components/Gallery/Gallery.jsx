@@ -9,18 +9,18 @@ function Gallery({ files }) {
         {files.map((file, index) => (
           <div key={index} className={styles.galleryFlex}>
             {/* Display image */}
-            {file.type.includes("image") && (
+            {file.mime_type.includes("image") && (
               <img
                 className={`${styles.gallery__item} ${styles.image}`}
-                src={`${file.url}`}
+                src={`${file.filename}`}
                 alt={`File ${index + 1}`}
               />
             )}
             {/* Display video */}
-            {file.type.includes("video") && (
+            {file.mime_type.includes("video") && (
               <video
                 controls
-                src={`${file.url}`}
+                src={`${file.filename}`}
                 className={styles.gallery__item}
               />
             )}
