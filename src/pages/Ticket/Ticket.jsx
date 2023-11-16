@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { formatDate } from "../../utils/helpers";
 import Button from "../../components/Button/Button";
 import BackButton from "../../components/BackButton/BackButton";
@@ -8,39 +8,46 @@ import SelectField from "../../components/SelectField/SelectField";
 import Gallery from "../../components/Gallery/Gallery";
 import styles from "./Ticket.module.css";
 import { useTickets } from "../TicketList/useTickets";
+import { updateTicket } from "../../services/apiTickets";
+import { useTicket } from "../TicketList/useTicket";
 function Ticket() {
-  const [newStatus, setNewStatus] = useState("");
-  const [files, setFiles] = useState([]);
+  // const [files, setFiles] = useState([]);
   const { tickets } = useTickets();
   const { id } = useParams();
-  const ticket = tickets.find((ticket) => ticket.ticket_id === id);
-  const formattedDate = formatDate(ticket.created_at);
+  const { ticket } = useTicket(id);
+  console.log("ticket in Ticket.jsx", ticket);
+  const files = 0;
+  // In most cases we would have ticket be a const since its initial value is derived state
+  // Since it's value can be updated outside of our initial state, this is how we update it
+  // const [ticket, setTicket] = useState(
+  //   tickets ? tickets.find((ticket) => ticket.ticket_id === id) : ""
+  // );
+  const [newStatus, setNewStatus] = useState(ticket ? ticket.status : "");
+  const formattedDate = formatDate(ticket?.created_at);
+
+  useEffect(() => {
+    // Set the initial value of newStatus when the component mounts
+    if (ticket) {
+      setNewStatus(ticket.status);
+    }
+  }, [ticket]);
 
   const handleChange = async () => {
-    const userConfirmation = window.confirm(
-      `Confirm changes: Ticket Status: ${ticket.status} >> ${newStatus}\n\nUpon confirmation, the client will be notified via email of this change.`
-    );
-    if (userConfirmation) {
-      const res = await fetch("http://localhost:3001/api/update-ticket", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Set the content type header
-        },
-        body: JSON.stringify({
-          ticket_id: ticket.ticket_id,
-          status: newStatus,
-          email: ticket.email,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        console.log("Error updating the ticket status!");
-        return;
-      }
-      // updateTicket(data);
-      return;
-    }
-    setNewStatus(ticket.status);
+    // const userConfirmation = window.confirm(
+    //   `Confirm changes: Ticket Status: ${ticket.status} >> ${newStatus}\n\nUpon confirmation, the client will be notified via email of this change.`
+    // );
+    // if (userConfirmation) {
+    //   const { status } = await updateTicket(
+    //     ticket.ticket_id,
+    //     ticket.email,
+    //     newStatus
+    //   );
+    //   console.log("status", status);
+    //   setNewStatus(status);
+    //   setTicket(...ticket, status);
+    //   return;
+    // }
+    // setNewStatus(ticket.status);
   };
 
   const handleDownload = async () => {
@@ -74,10 +81,12 @@ function Ticket() {
 
     document.body.removeChild(a); // Remove the anchor element from the body
   };
+  // console.log("newStatus:", newStatus);
+  // console.log("ticket.status:", ticket.status);
 
   return (
     <>
-      {tickets ? (
+      {ticket !== undefined ? (
         <div className={styles.ticketContainer}>
           <div className={styles.ticket}>
             <div className={styles.heading}>
@@ -96,7 +105,7 @@ function Ticket() {
                 type="list"
                 title="Ticket Info"
                 listItems={[
-                  { "Request Type": ticket.request_type },
+                  { "Request Type": ticket?.request_type },
                   {
                     Status: (
                       <>
@@ -135,7 +144,7 @@ function Ticket() {
               />
               <InfoBlock title="Customer Notes">{ticket.text}</InfoBlock>
             </div>
-            {ticket.file.length > 0 && <Gallery files={ticket.file} />}
+            {ticket?.file?.length > 0 && <Gallery files={ticket.file} />}
           </div>
         </div>
       ) : (
