@@ -7,21 +7,13 @@ import InfoBlock from "../../components/InfoBlock/InfoBlock";
 import SelectField from "../../components/SelectField/SelectField";
 import Gallery from "../../components/Gallery/Gallery";
 import styles from "./Ticket.module.css";
-import { useTickets } from "../TicketList/useTickets";
 import { updateTicket } from "../../services/apiTickets";
 import { useTicket } from "../TicketList/useTicket";
+
 function Ticket() {
-  // const [files, setFiles] = useState([]);
-  const { tickets } = useTickets();
   const { id } = useParams();
   const { ticket } = useTicket(id);
   console.log("ticket in Ticket.jsx", ticket);
-  const files = 0;
-  // In most cases we would have ticket be a const since its initial value is derived state
-  // Since it's value can be updated outside of our initial state, this is how we update it
-  // const [ticket, setTicket] = useState(
-  //   tickets ? tickets.find((ticket) => ticket.ticket_id === id) : ""
-  // );
   const [newStatus, setNewStatus] = useState(ticket ? ticket.status : "");
   const formattedDate = formatDate(ticket?.created_at);
 
@@ -51,48 +43,41 @@ function Ticket() {
   };
 
   const handleDownload = async () => {
-    const res = await fetch("http://localhost:3001/api/get-files", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ticket_id: ticket.ticket_id,
-        files,
-      }),
-    });
-
-    if (!res.ok) {
-      console.log("error with downloading files!");
-      return;
-    }
-    const blob = await res.blob(); // Create a Blob from the response data
-    const url = URL.createObjectURL(blob); // Generate a temporary URL
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${ticket.ticket_id}-files.zip`; // Set the desired file name
-    a.style.display = "none"; // Hide the anchor element
-
-    document.body.appendChild(a); // Append the anchor element to the body
-    a.click(); // Programmatically click the anchor element
-
-    URL.revokeObjectURL(url); // Clean up the temporary URL
-
-    document.body.removeChild(a); // Remove the anchor element from the body
+    // const res = await fetch("http://localhost:3001/api/get-files", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     ticket_id: ticket.ticket_id,
+    //     files,
+    //   }),
+    // });
+    // if (!res.ok) {
+    //   console.log("error with downloading files!");
+    //   return;
+    // }
+    // const blob = await res.blob(); // Create a Blob from the response data
+    // const url = URL.createObjectURL(blob); // Generate a temporary URL
+    // const a = document.createElement("a");
+    // a.href = url;
+    // a.download = `${ticket.ticket_id}-files.zip`; // Set the desired file name
+    // a.style.display = "none"; // Hide the anchor element
+    // document.body.appendChild(a); // Append the anchor element to the body
+    // a.click(); // Programmatically click the anchor element
+    // URL.revokeObjectURL(url); // Clean up the temporary URL
+    // document.body.removeChild(a); // Remove the anchor element from the body
   };
-  // console.log("newStatus:", newStatus);
-  // console.log("ticket.status:", ticket.status);
 
   return (
     <>
-      {ticket !== undefined ? (
+      {ticket ? (
         <div className={styles.ticketContainer}>
           <div className={styles.ticket}>
             <div className={styles.heading}>
               <h1 className={styles.id}>Ticket ID {id}</h1>
               <div className={styles.buttonContainer}>
-                {files.length > 0 && (
+                {ticket?.files?.length > 0 && (
                   <Button onClick={handleDownload}>Download</Button>
                 )}
                 <BackButton>
@@ -144,7 +129,7 @@ function Ticket() {
               />
               <InfoBlock title="Customer Notes">{ticket.text}</InfoBlock>
             </div>
-            {ticket?.file?.length > 0 && <Gallery files={ticket.file} />}
+            {ticket?.files?.length > 0 && <Gallery files={ticket.files} />}
           </div>
         </div>
       ) : (

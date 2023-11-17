@@ -20,7 +20,7 @@ export const getTicket = async (id) => {
   });
   const data = await res.json();
   console.log(data);
-  return data.ticketData;
+  return data;
 };
 
 export const updateTicket = async (id, email, status) => {
