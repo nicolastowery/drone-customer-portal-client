@@ -2,7 +2,6 @@ import InfoBlock from "../InfoBlock/InfoBlock";
 import styles from "./Gallery.module.css";
 
 function Gallery({ files }) {
-  console.log("files in Gallery.jsx", files);
   return (
     <InfoBlock title="Gallery">
       <div className={styles.gallery}>

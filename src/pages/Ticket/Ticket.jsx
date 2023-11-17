@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { formatDate } from "../../utils/helpers";
+import { useTicket } from "./useTicket";
+import { useUpdateTicket } from "./useUpdateTicket";
 import Button from "../../components/Button/Button";
 import BackButton from "../../components/BackButton/BackButton";
 import InfoBlock from "../../components/InfoBlock/InfoBlock";
 import SelectField from "../../components/SelectField/SelectField";
 import Gallery from "../../components/Gallery/Gallery";
 import styles from "./Ticket.module.css";
-import { updateTicket } from "../../services/apiTickets";
-import { useTicket } from "../TicketList/useTicket";
+import { downloadFile } from "../../services/apiTickets";
 
 function Ticket() {
   const { id } = useParams();
   const { ticket } = useTicket(id);
-  console.log("ticket in Ticket.jsx", ticket);
-  const [newStatus, setNewStatus] = useState(ticket ? ticket.status : "");
+  const { updateTicket } = useUpdateTicket(id);
+  const [newStatus, setNewStatus] = useState(ticket?.status);
   const formattedDate = formatDate(ticket?.created_at);
 
   useEffect(() => {
@@ -25,53 +26,34 @@ function Ticket() {
   }, [ticket]);
 
   const handleChange = async () => {
-    // const userConfirmation = window.confirm(
-    //   `Confirm changes: Ticket Status: ${ticket.status} >> ${newStatus}\n\nUpon confirmation, the client will be notified via email of this change.`
-    // );
-    // if (userConfirmation) {
-    //   const { status } = await updateTicket(
-    //     ticket.ticket_id,
-    //     ticket.email,
-    //     newStatus
-    //   );
-    //   console.log("status", status);
-    //   setNewStatus(status);
-    //   setTicket(...ticket, status);
-    //   return;
-    // }
-    // setNewStatus(ticket.status);
+    const userConfirmation = window.confirm(
+      `Confirm changes: Ticket Status: ${ticket.status} >> ${newStatus}\n\nUpon confirmation, the client will be notified via email of this change.`
+    );
+    if (userConfirmation) {
+      console.log(ticket.ticket_id, ticket.email, newStatus);
+      updateTicket({
+        ...ticket,
+        status: newStatus,
+      });
+    }
   };
 
-  const handleDownload = async () => {
-    // const res = await fetch("http://localhost:3001/api/get-files", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     ticket_id: ticket.ticket_id,
-    //     files,
-    //   }),
-    // });
-    // if (!res.ok) {
-    //   console.log("error with downloading files!");
-    //   return;
-    // }
-    // const blob = await res.blob(); // Create a Blob from the response data
-    // const url = URL.createObjectURL(blob); // Generate a temporary URL
-    // const a = document.createElement("a");
-    // a.href = url;
-    // a.download = `${ticket.ticket_id}-files.zip`; // Set the desired file name
-    // a.style.display = "none"; // Hide the anchor element
-    // document.body.appendChild(a); // Append the anchor element to the body
-    // a.click(); // Programmatically click the anchor element
-    // URL.revokeObjectURL(url); // Clean up the temporary URL
-    // document.body.removeChild(a); // Remove the anchor element from the body
+  const handleDownload = () => {
+    ticket.files.forEach(async (file) => {
+      const blob = await downloadFile(file.filename);
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${ticket.ticket_id}${file.filename.substring(
+        file.filename.indexOf("-")
+      )}`;
+      link.click();
+      window.URL.revokeObjectURL(link.href);
+    });
   };
 
   return (
     <>
-      {ticket ? (
+      {newStatus ? (
         <div className={styles.ticketContainer}>
           <div className={styles.ticket}>
             <div className={styles.heading}>
@@ -133,7 +115,7 @@ function Ticket() {
           </div>
         </div>
       ) : (
-        <div>loading</div>
+        <div>LOADING...</div>
       )}
     </>
   );

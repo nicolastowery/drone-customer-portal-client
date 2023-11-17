@@ -1,3 +1,5 @@
+import supabase from "../supabase/supabase";
+
 const SERVER = "http://localhost:3001/api";
 
 export const getTickets = async () => {
@@ -8,7 +10,6 @@ export const getTickets = async () => {
 };
 
 export const getTicket = async (id) => {
-  console.log("attempting fetch");
   const res = await fetch(`${SERVER}/ticket`, {
     method: "POST",
     headers: {
@@ -19,26 +20,34 @@ export const getTicket = async (id) => {
     }),
   });
   const data = await res.json();
-  console.log(data);
   return data;
 };
 
-export const updateTicket = async (id, email, status) => {
+export const updateTicket = async (ticket) => {
   const res = await fetch(`${SERVER}/update-ticket`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      ticket_id: id,
-      status,
-      email,
-    }),
+    body: JSON.stringify(ticket),
   });
   const data = await res.json();
   console.log(data);
   if (!res.ok) {
     console.log("Error updating the ticket status!");
+    return;
+  }
+  return data;
+};
+
+export const downloadFile = async (filename) => {
+  console.log(filename);
+  const { data, error } = await supabase.storage
+    .from("uploads")
+    .download(filename);
+
+  if (error) {
+    console.log(error);
     return;
   }
   return data;
