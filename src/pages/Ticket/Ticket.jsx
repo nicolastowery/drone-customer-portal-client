@@ -30,7 +30,6 @@ function Ticket() {
       `Confirm changes: Ticket Status: ${ticket.status} >> ${newStatus}\n\nUpon confirmation, the client will be notified via email of this change.`
     );
     if (userConfirmation) {
-      console.log(ticket.ticket_id, ticket.email, newStatus);
       updateTicket({
         ...ticket,
         status: newStatus,

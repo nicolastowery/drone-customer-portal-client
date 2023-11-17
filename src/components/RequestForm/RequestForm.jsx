@@ -39,7 +39,6 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
   //relevant state should set back to empty if files were rejected
   const handleFileChange = (fileType, files) => {
     if (fileType === "qr") {
-      console.log("setting qr code");
       files[0].size < MAX_IMG_SIZE && setQr(files[0]);
       return;
     }
@@ -66,7 +65,6 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
 
       return true;
     });
-    console.log(isValid);
     if (isValid) {
       //set message back to default state and add the images to the appropriate state
       setMessage("");
@@ -84,7 +82,6 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
       (formBody.requestType === "Warranty Repair" && !qr)
     ) {
       setMessage("Please input data into the required fields!");
-      console.log(qr);
       return;
     }
 
@@ -98,7 +95,6 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
       return;
     }
     try {
-      console.log("processing request!");
       setMessage("Processing request...");
       //see about appending formBody in one line...
       //this is ugly as sin but it works....
@@ -122,22 +118,18 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
       formData.append("phoneNumber", formBody.phoneNumber);
       formData.append("contactMethod", formBody.contactMethod);
       formData.append("text", formBody.text);
-      qr && console.log("there is a qr");
       qr && formData.append("files", qr);
       images &&
         Array.from(images).forEach((image) => formData.append("files", image));
       videos &&
         Array.from(videos).forEach((video) => formData.append("files", video));
 
-      console.log("sending data!");
       const res = await fetch(`http://localhost:3001/api/send`, {
         method: "POST",
         body: formData,
       });
       const data = await res.json();
-      console.log(data);
       if (res.ok) {
-        console.log(data);
         onSubmit(true);
       } else {
         setMessage(data.error || "An error occuerred. Please try again later.");

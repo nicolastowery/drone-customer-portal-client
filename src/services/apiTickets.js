@@ -32,7 +32,6 @@ export const updateTicket = async (ticket) => {
     body: JSON.stringify(ticket),
   });
   const data = await res.json();
-  console.log(data);
   if (!res.ok) {
     console.log("Error updating the ticket status!");
     return;
@@ -41,7 +40,6 @@ export const updateTicket = async (ticket) => {
 };
 
 export const downloadFile = async (filename) => {
-  console.log(filename);
   const { data, error } = await supabase.storage
     .from("uploads")
     .download(filename);
