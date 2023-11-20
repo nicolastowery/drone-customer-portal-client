@@ -8,8 +8,8 @@ import BackButton from "../../components/BackButton/BackButton";
 import InfoBlock from "../../components/InfoBlock/InfoBlock";
 import SelectField from "../../components/SelectField/SelectField";
 import Gallery from "../../components/Gallery/Gallery";
-import styles from "./Ticket.module.css";
 import { downloadFile } from "../../services/apiTickets";
+import styles from "./Ticket.module.css";
 
 function Ticket() {
   const { id } = useParams();

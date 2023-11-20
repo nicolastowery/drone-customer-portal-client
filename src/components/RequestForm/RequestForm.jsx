@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import stateNames from "./states";
 import InputField from "./InputField";
 import SelectField from "../SelectField/SelectField";
@@ -17,7 +18,6 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
   const [images, setImages] = useState([]);
   const [videos, setVideos] = useState([]);
   const [qr, setQr] = useState(null);
-  const [message, setMessage] = useState("");
   const formData = new FormData();
   const [formBody, setFormBody] = useState({
     firstName: "",
@@ -48,14 +48,14 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
     const isValid = filesArr.every((f) => {
       //check if any file name contains an invalid char
       if (SYMBOLS.test(f.name)) {
-        setMessage("File name must not contain symbols.");
+        toast.error("File name must not contain symbols.");
         return false;
       }
       uploadSize += f.size;
 
       //check if the size of the uploaded files exceeds the maximum allowed
       if (uploadSize > maxSize) {
-        setMessage(
+        toast.error(
           `Files are too large! ${
             maxSize / 1024 / 1024
           }MB cap. You have uploaded ${(uploadSize / 1024 / 1024).toFixed(2)}MB`
@@ -66,8 +66,6 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
       return true;
     });
     if (isValid) {
-      //set message back to default state and add the images to the appropriate state
-      setMessage("");
       fileType === "images" ? setImages(files) : setVideos(files);
     }
   };
@@ -81,21 +79,21 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
       !formBody.text ||
       (formBody.requestType === "Warranty Repair" && !qr)
     ) {
-      setMessage("Please input data into the required fields!");
+      toast.error("Please input data into the required fields!");
       return;
     }
 
     if (!VALID_EMAIL.test(formBody.email)) {
-      setMessage("Please input a valid email address!");
+      toast.error("Please input a valid email address!");
       return;
     }
 
     if (formBody.phoneNumber && !VALID_PHONE.test(formBody.phoneNumber)) {
-      setMessage("Please input a valid phone number!");
+      toast.error("Please input a valid phone number!");
       return;
     }
     try {
-      setMessage("Processing request...");
+      toast.success("Processing request...");
       //see about appending formBody in one line...
       //this is ugly as sin but it works....
       formData.delete("firstName");
@@ -132,11 +130,13 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
       if (res.ok) {
         onSubmit(true);
       } else {
-        setMessage(data.error || "An error occuerred. Please try again later.");
+        toast.error(
+          data.error || "An error occuerred. Please try again later."
+        );
       }
     } catch (err) {
       console.log("Error:", err);
-      setMessage("An error occured. Please try again later");
+      toast.error(err.message);
     }
   };
   return (
@@ -264,7 +264,6 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
           SUBMIT
         </button>
       </form>
-      <Message message={message} />
     </>
   );
 }
