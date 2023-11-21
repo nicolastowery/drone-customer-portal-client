@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTickets } from "./useTickets";
 import styles from "./TicketList.module.css";

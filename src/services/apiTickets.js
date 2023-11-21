@@ -3,7 +3,14 @@ import supabase from "../supabase/supabase";
 const SERVER = "http://localhost:3001/api";
 
 export const getTickets = async () => {
-  const res = await fetch(`${SERVER}/admin`);
+  const { data: user, error } = await supabase.auth.getSession();
+  console.log(user.session);
+  const { access_token } = user.session;
+  const res = await fetch(`${SERVER}/admin`, {
+    headers: {
+      Authorization: access_token,
+    },
+  });
   const data = await res.json();
 
   return data;

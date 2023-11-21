@@ -7,7 +7,7 @@ import PageNav from "./components/PageNav/PageNav";
 import Admin from "./pages/Admin/Admin";
 import Ticket from "./pages/Ticket/Ticket";
 import TicketList from "./pages/TicketList/TicketList";
-
+import supabase from "./supabase/supabase";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
