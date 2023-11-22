@@ -1,26 +1,30 @@
-import supabase from "../supabase/supabase";
+import supabase, { getAccessToken } from "../supabase/supabase";
 
 const SERVER = "http://localhost:3001/api";
 
 export const getTickets = async () => {
-  const { data: user, error } = await supabase.auth.getSession();
-  console.log(user.session);
-  const { access_token } = user.session;
+  const access_token = await getAccessToken();
   const res = await fetch(`${SERVER}/admin`, {
     headers: {
       Authorization: access_token,
     },
   });
+  if (!res.ok) {
+    console.log("error authenticating");
+    return;
+  }
   const data = await res.json();
 
   return data;
 };
 
 export const getTicket = async (id) => {
+  const access_token = await getAccessToken();
   const res = await fetch(`${SERVER}/ticket`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: access_token,
     },
     body: JSON.stringify({
       ticket_id: id,
@@ -31,10 +35,12 @@ export const getTicket = async (id) => {
 };
 
 export const updateTicket = async (ticket) => {
+  const access_token = await getAccessToken();
   const res = await fetch(`${SERVER}/update-ticket`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: access_token,
     },
     body: JSON.stringify(ticket),
   });
