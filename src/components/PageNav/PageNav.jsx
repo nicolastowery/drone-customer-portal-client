@@ -4,6 +4,10 @@ function PageNav() {
   return (
     <nav className={styles.nav}>
       <Logo />
+      <div>
+        <div>PRE-ALPHA BUILD</div>
+        <div>NOT INTENDED FOR GENERAL PUBLIC USE</div>
+      </div>
     </nav>
   );
 }

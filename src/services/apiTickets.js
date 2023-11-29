@@ -1,10 +1,9 @@
 import supabase, { getAccessToken } from "../supabase/supabase";
-
-const SERVER = "http://localhost:3001/api";
+import { SERVER_NAME } from "../utils/constants";
 
 export const getTickets = async () => {
   const access_token = await getAccessToken();
-  const res = await fetch(`${SERVER}/admin`, {
+  const res = await fetch(`${SERVER_NAME}/admin`, {
     headers: {
       Authorization: access_token,
     },
@@ -20,7 +19,7 @@ export const getTickets = async () => {
 
 export const getTicket = async (id) => {
   const access_token = await getAccessToken();
-  const res = await fetch(`${SERVER}/ticket`, {
+  const res = await fetch(`${SERVER_NAME}/ticket`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -36,7 +35,7 @@ export const getTicket = async (id) => {
 
 export const updateTicket = async (ticket) => {
   const access_token = await getAccessToken();
-  const res = await fetch(`${SERVER}/update-ticket`, {
+  const res = await fetch(`${SERVER_NAME}/update-ticket`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

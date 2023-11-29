@@ -6,6 +6,7 @@ import SelectField from "../SelectField/SelectField";
 import FileInput from "./FileInput";
 import styles from "./RequestForm.module.css";
 import TextArea from "./TextArea";
+import { SERVER_NAME } from "../../utils/constants";
 import Message from "../Message/Message";
 
 const VALID_PHONE = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
@@ -122,7 +123,7 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
       videos &&
         Array.from(videos).forEach((video) => formData.append("files", video));
 
-      const res = await fetch(`http://localhost:3001/api/send`, {
+      const res = await fetch(`${SERVER_NAME}/send`, {
         method: "POST",
         body: formData,
       });
