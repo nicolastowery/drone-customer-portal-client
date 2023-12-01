@@ -3,7 +3,7 @@ import styles from "./Logo.module.css";
 function Logo() {
   return (
     <Link to={"/"}>
-      <img src="/logo.avif" alt="Bestway Ag" className={styles.logo} />
+      <img src="/logo.png" alt="Bestway Ag" className={styles.logo} />
     </Link>
   );
 }
