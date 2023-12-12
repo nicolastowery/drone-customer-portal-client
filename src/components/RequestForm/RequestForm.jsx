@@ -19,6 +19,7 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
   const [images, setImages] = useState([]);
   const [videos, setVideos] = useState([]);
   const [qr, setQr] = useState(null);
+  const [purchaseOrder, setPurchaseOrder] = useState(null);
   const formData = new FormData();
   const [formBody, setFormBody] = useState({
     firstName: "",
@@ -118,6 +119,7 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
       formData.append("contactMethod", formBody.contactMethod);
       formData.append("text", formBody.text);
       qr && formData.append("files", qr);
+      purchaseOrder && formData.append("files", purchaseOrder);
       images &&
         Array.from(images).forEach((image) => formData.append("files", image));
       videos &&
@@ -211,6 +213,17 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
             accept={"image/jpeg, image/png"}
             value={formBody.qr}
             onChange={(e) => handleFileChange("qr", e.target.files)}
+            multiple={false}
+          />
+        )}
+        {requestType === "Warranty Repair" && (
+          <FileInput
+            label={"Purchase Order"}
+            isRequired={true}
+            className={styles.form__item}
+            accept={"image/jpeg, image/png, application/pdf"}
+            value={formBody.purchaseOrder}
+            onChange={(e) => handleFileChange("purchaseOrder", e.target.files)}
             multiple={false}
           />
         )}
