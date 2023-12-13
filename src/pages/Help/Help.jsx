@@ -3,7 +3,7 @@ import RequestForm from "../../components/RequestForm/RequestForm";
 import styles from "./Help.module.css";
 import Success from "../Success/Success";
 function Help() {
-  const [requestType, setRequestType] = useState("General Question");
+  const [requestType, setRequestType] = useState("Warranty Repair");
   const [submitted, setSubmitted] = useState(false);
   return (
     <div className={styles.help}>

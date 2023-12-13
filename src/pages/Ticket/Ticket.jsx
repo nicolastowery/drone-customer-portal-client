@@ -17,7 +17,9 @@ function Ticket() {
   const { updateTicket } = useUpdateTicket(id);
   const [newStatus, setNewStatus] = useState(ticket?.status);
   const formattedDate = formatDate(ticket?.created_at);
-
+  const pdf =
+    ticket?.files &&
+    ticket.files.find((file) => file.type === "application/pdf");
   useEffect(() => {
     // Set the initial value of newStatus when the component mounts
     if (ticket) {
@@ -94,6 +96,20 @@ function Ticket() {
                     ),
                   },
                   { "Ticket Submission Date": formattedDate },
+                  pdf
+                    ? {
+                        "Purchase Order": (
+                          <a
+                            href={pdf.url}
+                            alt="View Purchase Order"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            View
+                          </a>
+                        ),
+                      }
+                    : "",
                 ]}
               />
               <InfoBlock

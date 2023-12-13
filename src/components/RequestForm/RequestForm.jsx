@@ -7,7 +7,6 @@ import FileInput from "./FileInput";
 import styles from "./RequestForm.module.css";
 import TextArea from "./TextArea";
 import { SERVER_NAME } from "../../utils/constants";
-import Message from "../Message/Message";
 
 const VALID_PHONE = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
 const VALID_EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -25,7 +24,7 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
     firstName: "",
     lastName: "",
     companyName: "",
-    requestType: "General Question",
+    requestType: "Warranty Repair",
     state: "Alabama",
     email: "",
     phoneNumber: "",
@@ -151,9 +150,9 @@ function RequestForm({ requestType, onChangeRequestType, onSubmit }) {
           onChange={(e) => handleFieldChange("requestType", e.target.value)}
           className={styles.form__item}
           options={[
-            "General Question",
             "Warranty Repair",
             "Non-Warranty Repair",
+            "General Question",
             "Training Request",
           ]}
         />
